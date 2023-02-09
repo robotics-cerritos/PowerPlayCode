@@ -11,9 +11,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-//@Autonomous(name="SamplePowerPlayAuto", group="Linear Opmode")
+//@Autonomous(name="BlueAuto", group="Linear Opmode")
 
-public class SamplePowerPlayAuto extends LinearOpMode{
+public class BlueAuto extends LinearOpMode{
   private ElapsedTime runtime = new ElapsedTime();
   //WHEELS
   private DcMotorEx leftFront;
@@ -28,8 +28,8 @@ public class SamplePowerPlayAuto extends LinearOpMode{
   private Servo claw;
   
   //SLIDES
-  private DcMotor slideMotor1;
-  private DcMotor slideMotor2;
+  private DcMotor motor1;
+  private DcMotor motor2;
 
 
   //X and Y Power of Robot Chasis Movement Motors
@@ -54,12 +54,12 @@ public class SamplePowerPlayAuto extends LinearOpMode{
     turntableMotor = hardwareMap.dcMotor.get("testMotor");
     
      //Slides
-    slideMotor1 = hardwareMap.dcMotor.get("motor1");
-    slideMotor2 = hardwareMap.dcMotor.get("motor2");
+    motor1 = hardwareMap.dcMotor.get("rightSlide");
+    motor2 = hardwareMap.dcMotor.get("leftSlide");
     
     
     
-    slideMotor1.setDirection(DcMotor.Direction.REVERSE);
+    motor1.setDirection(DcMotor.Direction.REVERSE);
     waitForStart();
 
     runtime.reset();
@@ -70,10 +70,12 @@ public class SamplePowerPlayAuto extends LinearOpMode{
       claw.setPosition(0.0);
       
     }
-    allPower(-0.3,2.1);
-    strafe(0.4,1.1);
-    pause(1.5);
-    moveSlides(0.6,10);
+    strafe(0.6,2.8);
+    allPower(0.2,0.5);
+    while(opModeIsActive()&&(runtime.seconds()<=0.5)){
+      claw.setPosition(0.0);
+      
+    }
     
   }
   
@@ -85,18 +87,18 @@ public class SamplePowerPlayAuto extends LinearOpMode{
   
   public void moveSlides(double directionPower, double time){
     while(opModeIsActive() && (runtime.seconds()<=time)){
-      slideMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-      slideMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+      motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+      motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
       if(runtime.seconds()<=(0.25)*time){
-        slideMotor1.setPower(directionPower);
-        slideMotor2.setPower(directionPower);
+        motor1.setPower(directionPower);
+        motor2.setPower(directionPower);
         
       }
       if(runtime.seconds()>(0.25)*time){
-        slideMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slideMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slideMotor1.setPower(0.0);
-        slideMotor2.setPower(0.0);
+        motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor1.setPower(0.0);
+        motor2.setPower(0.0);
         claw.setPosition(0.6);
       }
       
